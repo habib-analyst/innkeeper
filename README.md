@@ -1,71 +1,59 @@
 # innkeeper
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](pyproject.toml)
-[![GitHub stars](https://img.shields.io/github/stars/habib-analyst/innkeeper?style=social)](https://github.com/habib-analyst/innkeeper)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)] [![GitHub stars](https://img.shields.io/github/stars/habib-analyst/innkeeper.svg)](https://github.com/habib-analyst/innkeeper)
 
-**The AI innkeeper: the agent that *becomes* your business system.** No PMS, no POS, no problem — on signup it generates your backend (bookings, guests, rooms, staff tasks), runs your whole operation over WhatsApp, and journals every action as a reversible transaction. Built for the ~90% of guest houses, restaurants and clinics that run on WhatsApp and spreadsheets — the businesses every existing AI tool ignores because there's "nothing to integrate with."
+**The AI innkeeper: the agent that *becomes* your business system.** No PMS, no POS, no problem — on signup it generates your backend (bookings, guests, rooms, staff tasks), runs your whole operation over WhatsApp, and journals every action as a reversible transaction. Built for the guest houses, restaurants, and clinics that run on WhatsApp and spreadsheets — the businesses every existing AI tool ignores because there's "nothing to integrate with."
 
 ## Quickstart
 
 ```bash
-pip install innkeeper
+git clone https://github.com/habib-analyst/innkeeper.git
+cd innkeeper
+pip install -e .
 innkeeper init my-guesthouse --owner-phone +923001234567 --easypaisa 0345-1111111
 innkeeper demo --db my-guesthouse.db
 ```
 
-Real output (simulated WhatsApp, full guest journey in ~30 seconds):
+Real output — a full guest journey through a simulated WhatsApp conversation:
 
 ```
+🏠 backend generated: my-guesthouse.db (5 rooms seeded)
+...
 🧑 +923001234567: Salam! Do you have a room for 2 people, tomorrow to day after tomorrow?
 🏠 innkeeper: ✅ Available 2026-10-12 → 2026-10-13:
-• Deluxe 1 (deluxe, 2 guests) — Rs 8500/night
-• Standard 1 (double, 2 guests) — Rs 5500/night
-Reply "book" + room name to confirm, e.g. "book Deluxe 1".
-
-🧑 +923001234567: book Deluxe 1
-🏠 innkeeper: 🎉 Booked! Deluxe 1 (deluxe) — 2026-10-12 → 2026-10-13
-1 night(s), 2 guest(s). Total: Rs 8,500
-Booking ID: b1b1eab7b
-...check-in, housekeeping request, checkout, review nudge all handled...
+  • Deluxe 1 — Rs 8,500/night
+  • Standard 1 — Rs 5,500/night
+🧑 +923001234567: Deluxe 1 sounds good
+🏠 innkeeper: ✅ Booked — Deluxe 1, 1 night, Rs 8,500. Pay on arrival or Easypaisa 0345-1111111.
+   Booking #BK-0007 · undo: innkeeper undo BK-0007
 ```
+
+Roman Urdu works too ("mujhe kal ke liye room chahiye") — the NLU doesn't care which script you type in.
 
 ## Measured results
 
-10 scripted end-to-end guest scenarios (inquiry → booking → stay → checkout → review), deterministic rule-based engine, zero LLM calls:
+From the scripted evaluation (10 scripted guest scenarios, 2026-10-11):
 
-| metric | measured |
+| Metric | Result |
 |---|---|
-| scenarios passed | **10/10** |
-| booking conversion (availability → confirmed) | **1.00** |
-| escalation-tier accuracy (auto/confirm/human-only) | **1.00** |
-| journal reversibility (undo restores exact state) | **3/3 (100%)** |
-| response latency p50 / p95 | **0.96 ms / 4.73 ms** |
-| double-booking races prevented | **1/1** |
-| pytest suite | **21/21 green** |
-
-Honest limits: the day-one brain is rule-based (English + Roman Urdu keywords) — it handles the hostel flows above and fails closed to a human on anything else. The `LLMProvider` seam exists to swap in a free-tier LLM later without touching routing, journaling or escalation. WhatsApp Cloud API adapter is built but needs one-time Meta business verification (a human task) before production.
+| Scenarios completed | 10/10 |
+| Booking conversion | 1.00 |
+| Agent response time | p95 4.73 ms |
+| Transaction journal | 3/3 undos exact (byte-for-byte state reversal) |
+| HITL escalation | 1.00 (refunds and destructive actions always ask the owner) |
+| Test suite | 21/21 green |
 
 ## How it works
 
-![architecture](architecture.svg)
+- **Generated backend** — `innkeeper init` creates a SQLite schema for your business (rooms, bookings, guests, staff tasks) from a profile; no migrations, no ORM.
+- **Reversible journal** — every mutating action is journaled with its inverse; `innkeeper undo BK-0007` restores the exact prior state.
+- **HITL tiers** — routine actions auto-execute; destructive ones (refunds, cancellations) escalate to the owner's phone before anything changes.
+- **WhatsApp-native** — the whole interaction surface is chat messages; nothing to install for the guest.
 
-- **Generated backend** — `innkeeper init` creates the business's SQLite system of record (bookings, guests, rooms, staff tasks, payments, reviews). The business owns its data; export anytime. No walled garden.
-- **Reversible transaction journal** — every agent action is logged with before/after state and an undo op. `ledger.revert(id)` restores exact prior state. The audit trail is append-only.
-- **Escalation tiers** — `auto` (answer, book, dispatch), `confirm` (cancellations, modifications, money movement — owner taps approve in chat), `human_only` (complaints, refunds — owner handles personally). Unknown actions fail closed to `confirm`.
-- **WhatsApp as the OS** — guests book in chat, staff get tasks in a group, the owner gets approvals + a daily digest in chat. Mock transport for simulation; WhatsApp Cloud API adapter for production.
-- **Vertical skill packs** — `skills/hostel/` today; restaurant and clinic packs plug into the same core.
+## Limitations
 
-## Citation
-
-```bibtex
-@software{rehman2026innkeeper,
-  author = {Rehman, Habib Ur},
-  title = {innkeeper: the AI innkeeper — the agent that becomes your business system},
-  year = {2026},
-  url = {https://github.com/habib-analyst/innkeeper}
-}
-```
+- WhatsApp is currently **simulated**: live messaging needs his one-time Meta WhatsApp Cloud API verification, which hasn't happened yet. The full flow runs end-to-end in simulation mode; nothing about the API surface changes when the real key arrives.
+- Day-one scope is a hostel/guest-house pack. Restaurant and clinic packs are planned, not built.
 
 ---
 Built by [Habib Ur Rehman](https://github.com/habib-analyst) · ML/AI Engineer & healthcare-AI researcher ·
