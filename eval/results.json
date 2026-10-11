@@ -1,0 +1,172 @@
+{
+  "scenarios_run": 10,
+  "scenarios_passed": 10,
+  "booking_conversion": 1.0,
+  "latency_ms_p50": 0.96,
+  "latency_ms_p95": 4.73,
+  "escalation_tier_accuracy": 1.0,
+  "journal_reversibility": {
+    "n_booking_undos": 2,
+    "all_correct": true,
+    "details": [
+      {
+        "entry": "j867c2ea12f56",
+        "booking": "bd6e3a5ea",
+        "ok": true
+      },
+      {
+        "entry": "j080f4df925be",
+        "booking": "bfaa89482",
+        "ok": true
+      },
+      {
+        "entry": "ja8f0126c61d6",
+        "task": "t597e4454",
+        "deleted": true
+      }
+    ]
+  },
+  "engine": "rule-based brain + StubProvider (no LLM calls; deterministic)",
+  "scenarios": [
+    {
+      "id": "happy_path",
+      "latency_ms": [
+        3.1043210001371335,
+        4.728580001028604,
+        0.6214730001374846,
+        1.5230169992719311,
+        0.5292750010994496,
+        1.4577180008927826
+      ],
+      "checks": {
+        "booking_created": true,
+        "housekeeping_task": true,
+        "review_scheduled": true,
+        "tier_booking_create": true
+      },
+      "actual_tier_booking_create": "auto",
+      "passed": true
+    },
+    {
+      "id": "no_availability",
+      "latency_ms": [
+        0.5566460004047258
+      ],
+      "checks": {
+        "booking_created": true,
+        "reply_contains": true
+      },
+      "passed": true
+    },
+    {
+      "id": "modify_approved",
+      "latency_ms": [
+        0.47547299982397817,
+        2.110628998707398,
+        0.694382000801852,
+        0.9334210008091759
+      ],
+      "checks": {
+        "booking_created": true,
+        "modified": true,
+        "tier_booking_modify": true
+      },
+      "actual_tier_booking_modify": "confirm",
+      "passed": true
+    },
+    {
+      "id": "cancel_approved",
+      "latency_ms": [
+        0.4385980009828927,
+        0.963827000305173,
+        0.41585399958421476,
+        0.7333909998124
+      ],
+      "checks": {
+        "cancelled": true,
+        "tier_booking_cancel": true
+      },
+      "actual_tier_booking_cancel": "confirm",
+      "passed": true
+    },
+    {
+      "id": "cancel_rejected",
+      "latency_ms": [
+        0.494621999678202,
+        2.8465539999160683,
+        4.249709998475737,
+        4.008207999504521
+      ],
+      "checks": {
+        "cancelled": true,
+        "booking_status": true
+      },
+      "passed": true
+    },
+    {
+      "id": "late_checkout",
+      "latency_ms": [
+        2.502216999346274,
+        3.3216970005014446,
+        5.477583999891067,
+        0.6696660002489807,
+        0.19373099894437473
+      ],
+      "checks": {
+        "reply_contains": true
+      },
+      "passed": true
+    },
+    {
+      "id": "complaint_escalates",
+      "latency_ms": [
+        6.506579000415513
+      ],
+      "checks": {
+        "reply_contains": true,
+        "owner_notified": true,
+        "tier_complaint_brief": true
+      },
+      "actual_tier_complaint_brief": "human_only",
+      "passed": true
+    },
+    {
+      "id": "high_value_confirm",
+      "latency_ms": [
+        2.2838789991510566,
+        3.4619469988683704,
+        1.170186000308604
+      ],
+      "checks": {
+        "booking_created": true,
+        "tier_booking_create": true
+      },
+      "actual_tier_booking_create": "confirm",
+      "passed": true
+    },
+    {
+      "id": "no_double_booking",
+      "latency_ms": [
+        0.5052079995948588,
+        0.5552839993470116,
+        1.5090050001163036,
+        0.42311500146752223
+      ],
+      "checks": {
+        "deluxe1_bookings": true,
+        "no_double_booking": true
+      },
+      "passed": true
+    },
+    {
+      "id": "unknown_fallback",
+      "latency_ms": [
+        0.44167299893160816
+      ],
+      "checks": {
+        "reply_contains": true
+      },
+      "passed": true
+    }
+  ]
+}

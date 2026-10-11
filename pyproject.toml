@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "innkeeper"
+version = "0.1.0"
+description = "The AI innkeeper: the agent that becomes your business system — generated backend, WhatsApp-native, every action reversible."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Habib Ur Rehman", email = "habib.gcuf.edu@gmail.com"}]
+keywords = ["hospitality", "whatsapp", "ai-agent", "booking", "automation"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+innkeeper = "innkeeper.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/habib-analyst/innkeeper"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["innkeeper*"]

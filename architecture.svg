@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="420" viewBox="0 0 860 420" font-family="system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      .box { fill: #0d1117; stroke: #58a6ff; stroke-width: 1.5; rx: 8; }
+      .title { fill: #58a6ff; font-size: 13px; font-weight: 700; }
+      .body { fill: #c9d1d9; font-size: 11px; }
+      .dim { fill: #8b949e; font-size: 10px; }
+      .arrow { stroke: #8b949e; stroke-width: 1.5; fill: none; marker-end: url(#ah); }
+      .core { fill: #161b22; stroke: #f0883e; stroke-width: 2; rx: 10; }
+      .coretitle { fill: #f0883e; font-size: 14px; font-weight: 800; }
+    </style>
+    <marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8" fill="none" stroke="#8b949e" stroke-width="1.5"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="860" height="420" fill="#ffffff"/>
+
+  <!-- guests -->
+  <rect x="20" y="40" width="150" height="90" class="box" rx="8"/>
+  <text x="95" y="65" text-anchor="middle" class="title">Guests</text>
+  <text x="95" y="85" text-anchor="middle" class="body">WhatsApp chat</text>
+  <text x="95" y="102" text-anchor="middle" class="dim">book · check-in · requests</text>
+
+  <!-- staff -->
+  <rect x="20" y="160" width="150" height="90" class="box" rx="8"/>
+  <text x="95" y="185" text-anchor="middle" class="title">Staff</text>
+  <text x="95" y="205" text-anchor="middle" class="body">WhatsApp group</text>
+  <text x="95" y="222" text-anchor="middle" class="dim">task dispatch</text>
+
+  <!-- owner -->
+  <rect x="20" y="280" width="150" height="90" class="box" rx="8"/>
+  <text x="95" y="305" text-anchor="middle" class="title">Owner</text>
+  <text x="95" y="325" text-anchor="middle" class="body">WhatsApp</text>
+  <text x="95" y="342" text-anchor="middle" class="dim">approvals · daily digest</text>
+
+  <!-- transport -->
+  <rect x="230" y="150" width="150" height="110" class="box" rx="8"/>
+  <text x="305" y="175" text-anchor="middle" class="title">Transport</text>
+  <text x="305" y="195" text-anchor="middle" class="body">Mock (sim)</text>
+  <text x="305" y="212" text-anchor="middle" class="body">WhatsApp Cloud API</text>
+  <text x="305" y="229" text-anchor="middle" class="dim">swappable adapter</text>
+
+  <!-- core -->
+  <rect x="440" y="30" width="400" height="360" class="core" rx="10"/>
+  <text x="640" y="58" text-anchor="middle" class="coretitle">INNKEEPER CORE</text>
+
+  <rect x="460" y="75" width="360" height="70" class="box" rx="8"/>
+  <text x="640" y="98" text-anchor="middle" class="title">Agent brain</text>
+  <text x="640" y="118" text-anchor="middle" class="body">intent NLU · slot state machine · skill routing</text>
+  <text x="640" y="134" text-anchor="middle" class="dim">rule-based day one · LLMProvider seam</text>
+
+  <rect x="460" y="160" width="175" height="90" class="box" rx="8"/>
+  <text x="547" y="183" text-anchor="middle" class="title">Ledger</text>
+  <text x="547" y="203" text-anchor="middle" class="body">reversible journal</text>
+  <text x="547" y="220" text-anchor="middle" class="dim">every action undoable</text>
+
+  <rect x="645" y="160" width="175" height="90" class="box" rx="8"/>
+  <text x="732" y="183" text-anchor="middle" class="title">Escalation</text>
+  <text x="732" y="203" text-anchor="middle" class="body">auto / confirm</text>
+  <text x="732" y="220" text-anchor="middle" class="dim">/ human-only tiers</text>
+
+  <rect x="460" y="265" width="360" height="105" class="box" rx="8"/>
+  <text x="640" y="288" text-anchor="middle" class="title">Generated backend (SQLite)</text>
+  <text x="640" y="308" text-anchor="middle" class="body">bookings · guests · rooms · staff_tasks</text>
+  <text x="640" y="325" text-anchor="middle" class="body">payments · reviews · _journal</text>
+  <text x="640" y="342" text-anchor="middle" class="dim">the business owns its data · export anytime</text>
+
+  <!-- skill packs -->
+  <rect x="460" y="385" width="0" height="0"/>
+  <text x="640" y="405" text-anchor="middle" class="dim">vertical skill packs plug in: hostel ✓ · restaurant · clinic</text>
+
+  <!-- arrows -->
+  <path d="M170 85 C 200 85, 200 180, 228 190" class="arrow"/>
+  <path d="M170 205 L228 205" class="arrow"/>
+  <path d="M170 325 C 200 325, 200 230, 228 220" class="arrow"/>
+  <path d="M380 205 L438 205" class="arrow"/>
+  <text x="305" y="140" text-anchor="middle" class="dim">WhatsApp is the UI</text>
+  <text x="640" y="22" text-anchor="middle" class="dim" font-size="12">the agent BECOMES the system — it doesn't plug into one</text>
+</svg>
